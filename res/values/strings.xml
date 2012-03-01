@@ -6,5 +6,12 @@
     <string name="buttonUpdate">Update</string>
     <string name="initialCharCount">000</string>
     <string name="charCountLimit">140</string>
+    <string name="titlePrefs">Preferences</string>
+    <string name="titleUsername">Username</string>
+    <string name="summaryUsername">Login for service</string>
+    <string name="titlePassword">Password</string>
+    <string name="summaryPassword">Password used to login</string>
+    <string name="titleApiRoot">API Root</string>
+    <string name="summaryApiRoot">API-Root URL for specific service</string>
 
 </resources>
