@@ -3,22 +3,28 @@ package ch.cvarta.yamba;
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class StatusActivity extends Activity implements OnClickListener{
+public class StatusActivity extends Activity implements OnClickListener, TextWatcher{
 	
 	private static final String TAG = "StatusActivity";
 	EditText editText;
 	Button updateButton;
 	Twitter twitter;
+	//TextCount is also an View
+	TextView textCount;
 	
     /** Called when the activity is first created. */
     @Override
@@ -37,7 +43,14 @@ public class StatusActivity extends Activity implements OnClickListener{
         updateButton = (Button)findViewById(R.id.buttonUpdate);
         updateButton.setOnClickListener(this);
         
-        //Deprecated - use oath
+        textCount = (TextView)findViewById(R.id.textCount);
+        textCount.setText(R.string.charCountLimit);
+        textCount.setTextColor(Color.GREEN);
+        //register myself as TextWatchListener
+        editText.addTextChangedListener(this);
+        
+        
+        //Deprecated - twitter now uses oauth
         twitter = new Twitter("Hanafubuki", "q4b16ozpmi");
         twitter.setAPIRootUrl("http://yamba.marakana.com/api");
     }
@@ -78,6 +91,33 @@ public class StatusActivity extends Activity implements OnClickListener{
 			String status = editText.getText().toString();
 			new PostToTwitter().execute(status);
 			Log.d(TAG, "onClicked");
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				int charLimit = Integer.parseInt(this.getString(R.string.charCountLimit));
+				int newCount = charLimit - s.length();
+				textCount.setText(Integer.toString(newCount));
+				textCount.setTextColor(Color.GREEN);
+				if (newCount < 10){
+					textCount.setTextColor(Color.YELLOW);
+				}
+				if (newCount < 0){
+					textCount.setTextColor(Color.RED);
+				}
+				
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				//NOT USED
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				//NOT USED
 			}
         	
         
