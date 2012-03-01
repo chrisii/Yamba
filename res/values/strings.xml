@@ -4,5 +4,6 @@
     <string name="titleStatus">Status Update</string>
     <string name="hintText">Please enter your 140-character Status</string>
     <string name="buttonUpdate">Update</string>
+    <string name="initialCharCount">000</string>
 
 </resources>
