@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Yamba</string>
+    <string name="titleStatus">Status Aktualisieren</string>
+    <string name="hintText">140 zeichen-lange Nachricht eingeben</string>
+    <string name="buttonUpdate">Status aktualisieren</string>
+    <string name="initialCharCount">000</string>
+    <string name="charCountLimit">140</string>
+
+</resources>
