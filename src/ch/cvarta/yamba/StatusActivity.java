@@ -3,13 +3,20 @@ package ch.cvarta.yamba;
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,7 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class StatusActivity extends Activity implements OnClickListener, TextWatcher{
+public class StatusActivity extends Activity implements OnClickListener, TextWatcher, OnSharedPreferenceChangeListener{
 	
 	private static final String TAG = "StatusActivity";
 	EditText editText;
@@ -25,12 +32,18 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 	Twitter twitter;
 	//TextCount is also an View
 	TextView textCount;
+	//Sharedpreferences to easily access preferences
+	SharedPreferences prefs;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.status);
+        
+        //Setup Preferences
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.registerOnSharedPreferenceChangeListener(this);
         
         //small hack:
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -54,6 +67,21 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
         twitter = new Twitter("Hanafubuki", "q4b16ozpmi");
         twitter.setAPIRootUrl("http://yamba.marakana.com/api");
     }
+    
+    //lazy initialization of the twitter object with shared preferences
+    private Twitter getTwitter(){
+    	if (twitter == null){
+    		String username, password, apiroot;
+    		username = prefs.getString("username", "");
+    		password = prefs.getString("password", "");
+    		apiroot = prefs.getString("apiRoot", "http://yamba.markana.com/api");
+    		
+    		//connect to twitter
+    		twitter = new Twitter(username,password);
+    		twitter.setAPIRootUrl(apiroot);
+    	}
+    	return twitter;
+    }
         
         //Asynch Posts to twitter
         class PostToTwitter extends AsyncTask<String, Integer, String>{
@@ -61,7 +89,7 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 			@Override
 			protected String doInBackground(String... statuses) {
 				try{
-					Twitter.Status status = twitter.updateStatus(statuses[0]);
+					Twitter.Status status = getTwitter().updateStatus(statuses[0]);
 					return status.text;
 				}catch(TwitterException e){
 					Log.e(TAG, e.toString());
@@ -119,16 +147,38 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 					int count) {
 				//NOT USED
 			}
+			
+			//Called first time user clicks the menu button
+			@Override
+			public boolean onCreateOptionsMenu(Menu menu){
+				MenuInflater inflater = getMenuInflater();
+				inflater.inflate(R.menu.menu, menu);
+				return true;
+			}
+			
+			//Called when an options item is clicked
+			@Override
+			public boolean onOptionsItemSelected(MenuItem item){
+				switch (item.getItemId()) {
+				case R.id.itemPrefs:
+						startActivity(new Intent(this, PrefsActivity.class));
+					break;
+
+				default:
+					break;
+				}
+				//to consume the event return true!
+				return true;
+			}
+
+			@Override
+			public void onSharedPreferenceChanged(
+					SharedPreferences sharedPreferences, String key) {
+				//invalidate twitter objekt so it gets recreated on next access
+				twitter = null;
+				
+			}
         	
         
         
     }
-
-    /**
-     * this method is called when the button is clicked
-     */
-//	@Override
-//	public void onClick(View v) {
-//		twitter.setStatus(editText.getText().toString());
-//		Log.d(TAG, "onClicked");
-//	}
