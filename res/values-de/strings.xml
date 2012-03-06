@@ -6,5 +6,7 @@
     <string name="buttonUpdate">Status aktualisieren</string>
     <string name="initialCharCount">000</string>
     <string name="charCountLimit">140</string>
+    <string name="titleServiceStart">&quot;Start Service&quot;</string>
+    <string name="titleServiceStop">&quot;Stop Service&quot;</string>
 
 </resources>
