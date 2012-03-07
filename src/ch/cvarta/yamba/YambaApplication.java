@@ -13,6 +13,7 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
 	private static final String TAG = YambaApplication.class.getSimpleName();
 	private Twitter twitter;
 	private SharedPreferences prefs;
+	private boolean serviceRunning;
 	
 	
 	/*
@@ -66,6 +67,14 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
 			String key) {
 		//invalidate twitter objekt so it gets recreated on next access
 		twitter = null;
+	}
+	
+	public boolean isServiceRunning(){
+		return this.serviceRunning;
+	}
+	
+	public void setServiceRunning(boolean serviceRunning){
+		this.serviceRunning = serviceRunning;
 	}
 	
 }

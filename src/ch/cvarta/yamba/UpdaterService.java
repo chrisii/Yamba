@@ -1,5 +1,10 @@
 package ch.cvarta.yamba;
 
+import java.util.List;
+
+import winterwell.jtwitter.Twitter;
+import winterwell.jtwitter.TwitterException;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -13,6 +18,7 @@ public class UpdaterService extends Service {
 	volatile private boolean runFlag = false;
 	
 	private Updater updater;
+	private YambaApplication appcontext;
 	
 
 	@Override
@@ -24,6 +30,7 @@ public class UpdaterService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		appcontext = (YambaApplication)getApplication();
 		updater = new Updater();
 		Log.d(TAG, "onCreated");
 	}
@@ -35,6 +42,7 @@ public class UpdaterService extends Service {
 		runFlag = false;
 		this.updater.interrupt();
 		updater = null;
+		appcontext.setServiceRunning(false);
 		Log.d(TAG, "onDestroyed");
 	}
 
@@ -45,11 +53,15 @@ public class UpdaterService extends Service {
 		//start the updater in separate thread
 		runFlag = true;
 		updater.start();
+		appcontext.setServiceRunning(true);
 		
 		Log.d(TAG, "onStartCommand");
 		return START_STICKY;
 	}
 	class Updater extends Thread{
+		
+		private List<Twitter.Status> timeline;
+		
 		public Updater(){
 			super("UpdaterService-Updater");
 		}
@@ -59,7 +71,16 @@ public class UpdaterService extends Service {
 			while(UpdaterService.this.runFlag){
 				Log.d(TAG, "updater running");
 				try{
-					//Do some work
+					//get timeline
+					try{
+						this.timeline = appcontext.getTwitter().getFriendsTimeline();
+					} catch(TwitterException twe){
+						Log.d(TAG, "Failed to connect to twitter service");
+					}
+					//loop over timeline just log all messages:
+					for (Twitter.Status status : timeline){
+						Log.d(TAG, String.format("%s: %s", status.user, status.text));
+					}
 					Thread.sleep(DELAY);
 				} catch(InterruptedException ie){
 					UpdaterService.this.runFlag = false;
