@@ -74,12 +74,14 @@ public class UpdaterService extends Service {
 					//get timeline
 					try{
 						this.timeline = appcontext.getTwitter().getFriendsTimeline();
-					} catch(TwitterException twe){
+					} catch(NullPointerException twe){
 						Log.d(TAG, "Failed to connect to twitter service");
 					}
 					//loop over timeline just log all messages:
-					for (Twitter.Status status : timeline){
-						Log.d(TAG, String.format("%s: %s", status.user, status.text));
+					if (timeline!=null){
+						for (Twitter.Status status : timeline){
+							Log.d(TAG, String.format("%s: %s", status.user, status.text));
+						}
 					}
 					Thread.sleep(DELAY);
 				} catch(InterruptedException ie){
