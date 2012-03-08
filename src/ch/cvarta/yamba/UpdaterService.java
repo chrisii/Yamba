@@ -6,7 +6,10 @@ import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
 
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -20,6 +23,9 @@ public class UpdaterService extends Service {
 	private Updater updater;
 	private YambaApplication appcontext;
 	
+	private DbHelper dbhelper;
+	private SQLiteDatabase db;
+	
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -32,6 +38,9 @@ public class UpdaterService extends Service {
 		super.onCreate();
 		appcontext = (YambaApplication)getApplication();
 		updater = new Updater();
+		
+		dbhelper = new DbHelper(this);
+		
 		Log.d(TAG, "onCreated");
 	}
 
@@ -77,12 +86,36 @@ public class UpdaterService extends Service {
 					} catch(NullPointerException twe){
 						Log.d(TAG, "Failed to connect to twitter service");
 					}
+					//open the database for writing
+					db = dbhelper.getWritableDatabase();
+					ContentValues values = new ContentValues();
 					//loop over timeline just log all messages:
 					if (timeline!=null){
 						for (Twitter.Status status : timeline){
+							//Insert into database
+							values.clear();
+							values.put(DbHelper.C_ID, status.id);
+							values.put(DbHelper.C_CREATED_AT, status.createdAt.getTime());
+							values.put(DbHelper.C_SOURCE, status.source);
+							values.put(DbHelper.C_TEXT, status.text);
+							values.put(DbHelper.C_USER, status.user.name);
+							
+							//insert into database
+							//Needs to be surrounded with a try catch block as we are using the message id
+							//as the primary key --> however as we do retrieve the same msgs over and over again
+							//we inevitably will get duplicates --> insertion will fail: 2 possible solutions
+							//1. write logic to filter out duplicates
+							//2. let sql handle the duplicates --> catch the sql exception (especially easy)
+							try {
+								db.insertOrThrow(DbHelper.TABLE, null, values);
+							} catch (SQLException e) {
+								//just ignore
+							}
 							Log.d(TAG, String.format("%s: %s", status.user, status.text));
 						}
 					}
+					//close db
+					db.close();
 					Thread.sleep(DELAY);
 				} catch(InterruptedException ie){
 					UpdaterService.this.runFlag = false;

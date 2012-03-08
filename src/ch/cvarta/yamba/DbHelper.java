@@ -10,15 +10,15 @@ import android.util.Log;
 public class DbHelper extends SQLiteOpenHelper {
 	
 
-	private static final String TAG = "DbHelper";
-	private static final String DB_NAME = "timeline.db";
-	private static final int 	DB_VERSION = 1;
-	private static final String TABLE = "timeline";
-	private static final String C_ID = BaseColumns._ID;
-	private static final String C_CREATED_AT = "created_at";
-	private static final String C_SOURCE = "source";
-	private static final String C_TEXT = "txt";
-	private static final String C_USER = "user";
+	public static final String TAG = "DbHelper";
+	public static final String DB_NAME = "timeline.db";
+	public static final int 	DB_VERSION = 3;
+	public static final String TABLE = "timeline";
+	public static final String C_ID = BaseColumns._ID;
+	public static final String C_CREATED_AT = "created_at";
+	public static final String C_SOURCE = "source";
+	public static final String C_TEXT = "txt";
+	public static final String C_USER = "user";
 	
 	Context context;
 	
@@ -32,7 +32,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		String sql = String.format("create table %s (%s int primary key, %s int, %s text, %s text)", TABLE, C_ID, C_CREATED_AT, C_USER, C_TEXT);
+		String sql = "create table " + TABLE + " (" + C_ID + " int primary key, " + C_CREATED_AT + " int,"+ C_SOURCE + " text," + C_USER + " text," + C_TEXT + " text)";  
 		
 		db.execSQL(sql);
 		
@@ -49,7 +49,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		//drops the old database
-		db.execSQL("drop table if exists" + TABLE);
+		db.execSQL("drop table if exists " + TABLE);
 		Log.d(TAG, "onUpgrade");
 		//run onCreate to get a new database
 		onCreate(db);
