@@ -23,10 +23,6 @@ public class UpdaterService extends Service {
 	private Updater updater;
 	private YambaApplication appcontext;
 	
-	private DbHelper dbhelper;
-	private SQLiteDatabase db;
-	
-
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
@@ -38,9 +34,7 @@ public class UpdaterService extends Service {
 		super.onCreate();
 		appcontext = (YambaApplication)getApplication();
 		updater = new Updater();
-		
-		dbhelper = new DbHelper(this);
-		
+				
 		Log.d(TAG, "onCreated");
 	}
 
