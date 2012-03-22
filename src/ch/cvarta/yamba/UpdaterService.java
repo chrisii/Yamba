@@ -80,49 +80,16 @@ public class UpdaterService extends Service {
 			while(UpdaterService.this.runFlag){
 				Log.d(TAG, "updater running");
 				try{
-					//get timeline
-					try{
-						this.timeline = appcontext.getTwitter().getFriendsTimeline();
-					} catch(NullPointerException twe){
-						Log.d(TAG, "Failed to connect to twitter service");
+					YambaApplication yamba = (YambaApplication)UpdaterService.this.getApplication();
+					int newUpdates = yamba.fetchStatusUpdates();
+					if (newUpdates > 0){
+						Log.d(TAG,"We have new status");
 					}
-					//open the database for writing
-					db = dbhelper.getWritableDatabase();
-					ContentValues values = new ContentValues();
-					//loop over timeline just log all messages:
-					if (timeline!=null){
-						for (Twitter.Status status : timeline){
-							//Insert into database
-							values.clear();
-							values.put(DbHelper.C_ID, status.id);
-							values.put(DbHelper.C_CREATED_AT, status.createdAt.getTime());
-							values.put(DbHelper.C_SOURCE, status.source);
-							values.put(DbHelper.C_TEXT, status.text);
-							values.put(DbHelper.C_USER, status.user.name);
-							
-							//insert into database
-							//Needs to be surrounded with a try catch block as we are using the message id
-							//as the primary key --> however as we do retrieve the same msgs over and over again
-							//we inevitably will get duplicates --> insertion will fail: 2 possible solutions
-							//1. write logic to filter out duplicates
-							//2. let sql handle the duplicates --> catch the sql exception (especially easy)
-							try {
-								db.insertOrThrow(DbHelper.TABLE, null, values);
-							} catch (SQLException e) {
-								//just ignore
-							}
-							Log.d(TAG, String.format("%s: %s", status.user, status.text));
-						}
-					}
-					//close db
-					db.close();
 					Thread.sleep(DELAY);
-				} catch(InterruptedException ie){
+				}catch (InterruptedException ie){
 					UpdaterService.this.runFlag = false;
 				}
 			}
 		}
-		
-		
 	}
 }
