@@ -2,21 +2,13 @@ package ch.cvarta.yamba;
 
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -24,7 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class StatusActivity extends Activity implements OnClickListener, TextWatcher{
+public class StatusActivity extends BaseActivity implements OnClickListener, TextWatcher{
 	
 	private static final String TAG = "StatusActivity";
 	EditText editText;
@@ -120,36 +112,5 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				//NOT USED
-			}
-			
-			//Called first time user clicks the menu button
-			@Override
-			public boolean onCreateOptionsMenu(Menu menu){
-				MenuInflater inflater = getMenuInflater();
-				inflater.inflate(R.menu.menu, menu);
-				return true;
-			}
-			
-			//Called when an options item is clicked
-			@Override
-			public boolean onOptionsItemSelected(MenuItem item){
-				switch (item.getItemId()) {
-				case R.id.itemPrefs:
-					startActivity(new Intent(this, PrefsActivity.class));
-					break;
-				case R.id.itemTimelineActivity:
-					startActivity(new Intent(this,TimelineActivity3.class));
-					break;
-				case R.id.itemServiceStart:
-					startService(new Intent(this, UpdaterService.class));
-					break;
-				case R.id.itemServiceStop:
-					stopService(new Intent(this, UpdaterService.class));
-					break;
-				default:
-					break;
-				}
-				//to consume the event return true!
-				return true;
 			}
     }

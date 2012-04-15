@@ -16,4 +16,6 @@
     <string name="titleServiceStart">&quot;Start Service&quot;</string>
     <string name="titleServiceStop">&quot;Stop Service&quot;</string>
     <string name="titleTimeline">Timeline</string>
+    <string name="msgSetupPrefs">Please configure username and password</string>
+    <string name="titlePurge">Purge Data</string>
 </resources>
