@@ -33,6 +33,7 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
         //Setup Preferences
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
+        this.statusData = new StatusData(this);
         Log.i(TAG, "onCreate");
 		
 	}
@@ -87,9 +88,9 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
 			for (Status status : statusUpdates){
 				values.put(StatusData.C_ID, status.id);
 				long createdAt = status.getCreatedAt().getTime();
-				values.put(StatusData.C_CREATED_AT, status.createdAt.getTime());
-				values.put(StatusData.C_TEXT, status.text);
-				values.put(StatusData.C_USER, status.user.name);
+				values.put(StatusData.C_CREATED_AT, createdAt);
+				values.put(StatusData.C_TEXT, status.getText());
+				values.put(StatusData.C_USER, status.getUser().getName());
 				Log.d(TAG, "Got update with id: "+ status.getId() +  ". Saving");
 				this.getStatusData().insertOrIgnore(values);
 				if (latestStatusCreatedAtTime < createdAt){
@@ -102,6 +103,10 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
 			return count;
     	}catch(RuntimeException re){
 			Log.d(TAG, "Failed to fetch status updates");
+			Log.d(TAG, "Login valid: "+ this.getTwitter().isValidLogin());
+			if (re.getMessage() != null){
+				Log.d(TAG, re.getMessage());
+			}
 			return 0;
 		}
     }

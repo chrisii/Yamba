@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/itemPrefs" android:icon="@android:drawable/ic_menu_preferences" android:title="@string/titlePrefs"></item>
+    <item android:title="@string/titleTimeline" android:id="@+id/itemTimelineActivity" android:icon="@android:drawable/ic_menu_agenda"></item>
     <item android:title="@string/titleServiceStart" android:id="@+id/itemServiceStart" android:icon="@android:drawable/ic_media_play"></item>
     <item android:title="@string/titleServiceStop" android:id="@+id/itemServiceStop" android:icon="@android:drawable/ic_media_pause"></item>
-    
-
 </menu>

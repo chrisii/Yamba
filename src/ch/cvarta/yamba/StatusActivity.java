@@ -140,7 +140,10 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 			public boolean onOptionsItemSelected(MenuItem item){
 				switch (item.getItemId()) {
 				case R.id.itemPrefs:
-						startActivity(new Intent(this, PrefsActivity.class));
+					startActivity(new Intent(this, PrefsActivity.class));
+					break;
+				case R.id.itemTimelineActivity:
+					startActivity(new Intent(this,TimelineActivity2.class));
 					break;
 				case R.id.itemServiceStart:
 					startService(new Intent(this, UpdaterService.class));

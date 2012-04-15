@@ -39,12 +39,10 @@ public class StatusData {
 	//DbHelper Implementation
 	class DbHelper extends SQLiteOpenHelper {
 		
-		Context context;
 		
 
 		public DbHelper(Context context){
 			super(context, DB_NAME, null, DB_VERSION);
-			this.context = context;
 		}
 
 		@Override

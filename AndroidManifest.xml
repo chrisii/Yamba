@@ -27,5 +27,9 @@
             android:name=".PrefsActivity"
             android:label="@string/titlePrefs"
             ></activity>
+        <activity 
+            android:name=".TimelineActivity2"
+            android:label="@string/titleTimeline"
+            ></activity>
     </application>
 </manifest>

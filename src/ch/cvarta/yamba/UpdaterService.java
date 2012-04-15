@@ -63,7 +63,6 @@ public class UpdaterService extends Service {
 	}
 	class Updater extends Thread{
 		
-		private List<Twitter.Status> timeline;
 		
 		public Updater(){
 			super("UpdaterService-Updater");
