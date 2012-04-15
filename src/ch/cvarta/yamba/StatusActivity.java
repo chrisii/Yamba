@@ -29,7 +29,6 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 	private static final String TAG = "StatusActivity";
 	EditText editText;
 	Button updateButton;
-	Twitter twitter;
 	//TextCount is also an View
 	TextView textCount;
 	
@@ -56,10 +55,6 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
         //register myself as TextWatchListener
         editText.addTextChangedListener(this);
         
-        
-        //Deprecated - twitter now uses oauth
-        twitter = new Twitter("Hanafubuki", "q4b16ozpmi");
-        twitter.setAPIRootUrl("http://yamba.marakana.com/api");
     }
         
         //Asynch Posts to twitter
@@ -143,7 +138,7 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 					startActivity(new Intent(this, PrefsActivity.class));
 					break;
 				case R.id.itemTimelineActivity:
-					startActivity(new Intent(this,TimelineActivity2.class));
+					startActivity(new Intent(this,TimelineActivity3.class));
 					break;
 				case R.id.itemServiceStart:
 					startService(new Intent(this, UpdaterService.class));
