@@ -109,7 +109,7 @@ public class YambaApplication extends Application implements OnSharedPreferenceC
 	@Override
 	public synchronized void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		//invalidate twitter objekt so it gets recreated on next access
+		//invalidate twitter object so it gets recreated on next access
 		twitter = null;
 	}
 	

@@ -15,4 +15,5 @@
     <string name="summaryApiRoot">API-Root URL for your specific service</string>
     <string name="titleServiceStart">&quot;Start Service&quot;</string>
     <string name="titleServiceStop">&quot;Stop Service&quot;</string>
+    <string name="titleTimeline">Timeline</string>
 </resources>

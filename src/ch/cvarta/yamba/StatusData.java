@@ -50,7 +50,8 @@ public class StatusData {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			// TODO Auto-generated method stub
-			String sql = "create table " + TABLE + " (" + C_ID + " int primary key, " + C_CREATED_AT + " int, "+ C_USER + " text, " + C_TEXT + " text)";  			
+			String sql = "create table " + TABLE + " (" + C_ID + " int primary key, " 
+						+ C_CREATED_AT + " int, "+ C_USER + " text, " + C_TEXT + " text)";
 			db.execSQL(sql);
 			Log.d(TAG, "onCreate: SQL: " + sql);
 		}
